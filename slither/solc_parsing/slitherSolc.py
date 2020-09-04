@@ -91,7 +91,6 @@ class SlitherSolc:
         from slither.solc_parsing.types.sniffer import sniff
         from slither.solc_parsing.types.dump import dumps
         node = sniff(data_loaded)(data_loaded)
-        print(dumps(node))
 
         if "sourcePaths" in data_loaded:
             for sourcePath in data_loaded["sourcePaths"]:
