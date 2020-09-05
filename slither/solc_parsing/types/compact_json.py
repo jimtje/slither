@@ -119,6 +119,7 @@ def parse_struct_definition(raw: Dict) -> StructDefinition:
     for child in raw['members']:
         child_parsed = parse(child)
         assert isinstance(child_parsed, VariableDeclaration)
+        members_parsed.append(child_parsed)
 
     return StructDefinition(members_parsed, **_extract_decl_props(raw))
 
