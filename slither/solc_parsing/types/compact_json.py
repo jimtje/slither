@@ -681,7 +681,17 @@ def parse_identifier(raw: Dict) -> Identifier:
 
 
 def parse_elementary_type_name_expression(raw: Dict) -> ElementaryTypeNameExpression:
-    typename_parsed = parse(raw['typeName'])
+    if isinstance(raw['typeName'], dict):
+        # >= 0.6.0
+        typename_parsed = parse(raw['typeName'])
+    else:
+        # >= 0.4.12
+        typename_parsed = ElementaryTypeName(
+            raw['typeName'],
+            "default",
+            **_extract_base_props(raw),
+        )
+
     assert isinstance(typename_parsed, ElementaryTypeName)
 
     return ElementaryTypeNameExpression(typename_parsed, **_extract_expr_props(raw))
