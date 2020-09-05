@@ -1,7 +1,7 @@
 from typing import Callable
 
 from slither.solc_parsing.exceptions import ParsingError
-from slither.solc_parsing.types.types import *
+from slither.solc_parsing.types.types import * # lgtm[py/polluting-import]
 
 """
 The legacy AST format is used by all versions of Solidity that Slither currently supports (i.e. >=0.4.0), but it must

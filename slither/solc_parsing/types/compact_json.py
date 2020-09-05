@@ -1,7 +1,7 @@
 from typing import Callable
 
 from slither.solc_parsing.exceptions import ParsingError
-from slither.solc_parsing.types.types import *
+from slither.solc_parsing.types.types import * # lgtm[py/polluting-import]
 
 """
 The compact AST format was introduced in Solidity 0.4.12. In general, each node contains the following properties:
@@ -34,7 +34,7 @@ def _extract_expr_props(raw: Dict) -> Dict:
 def _extract_decl_props(raw: Dict) -> Dict:
     return {
         **_extract_base_props(raw),
-        'name': raw['name'],
+        'name': raw.get('name', None),
         'canonical_name': raw.get('canonicalName', ''),
         'visibility': raw.get('visibility', None),
     }
@@ -69,7 +69,7 @@ def parse_pragma_directive(raw: Dict) -> PragmaDirective:
 
 
 def parse_import_directive(raw: Dict) -> ImportDirective:
-    return ImportDirective(raw['absolutePath'], **_extract_base_props(raw))
+    return ImportDirective(raw['absolutePath'], **_extract_decl_props(raw))
 
 
 def parse_contract_definition(raw: Dict) -> ContractDefinition:
@@ -151,8 +151,11 @@ def parse_parameter_list(raw: Dict) -> ParameterList:
 
 
 def parse_function_definition(raw: Dict) -> FunctionDefinition:
-    body_parsed = parse(raw['body'])
-    assert isinstance(body_parsed, Block)
+    if raw['body']:
+        body_parsed = parse(raw['body'])
+        assert isinstance(body_parsed, Block)
+    else:
+        body_parsed = None
 
     modifiers_parsed = []
     for child in raw['modifiers']:
@@ -297,7 +300,17 @@ def parse_array_type_name(raw: Dict) -> ArrayTypeName:
 
 
 def parse_inline_assembly(raw: Dict) -> InlineAssembly:
-    return InlineAssembly(raw['AST'], **_extract_base_props(raw))
+    if 'AST' in raw:
+        # >= 0.6.0
+        ast = raw['AST']
+        assert isinstance(ast, dict)
+    elif 'operations' in raw:
+        # >= 0.4.12
+        ast = raw['operations']
+        assert isinstance(ast, str)
+    else:
+        raise ParsingError("not sure now to extract inline assembly")
+    return InlineAssembly(ast, **_extract_base_props(raw))
 
 
 def parse_block(raw: Dict) -> Block:
