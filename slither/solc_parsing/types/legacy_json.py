@@ -21,15 +21,9 @@ properties about the node
 
 
 def _extract_base_props(raw: Dict) -> Dict:
-    if raw['name'] == 'SourceUnit':
-        return {
-            'src': '',
-            'id': -1,
-        }
-
     return {
-        'src': raw['src'],
-        'id': raw['id'],
+        'src': raw.get('src', ''),
+        'id': raw.get('id', -1),
     }
 
 
