@@ -1,11 +1,11 @@
 """
     Event module
 """
-from typing import TYPE_CHECKING, Optional, List
+from typing import TYPE_CHECKING, List
 
 from slither.core.declarations.event import Event
 from slither.core.variables.event_variable import EventVariable
-from slither.solc_parsing.types.types import EventDefinition, ParameterList, VariableDeclaration
+from slither.solc_parsing.types.types import EventDefinition, VariableDeclaration
 from slither.solc_parsing.variables.event_variable import EventVariableSolc
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import List, TYPE_CHECKING, Union, Dict
+from typing import List, TYPE_CHECKING, Union
 
 from slither.core.solidity_types.elementary_type import (
     ElementaryType,

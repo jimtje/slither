@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 
 from slither.core.cfg.node import Node
 from slither.core.cfg.node import NodeType
